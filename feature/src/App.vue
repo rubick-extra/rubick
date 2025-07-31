@@ -8,36 +8,6 @@
           </template>
           {{ $t('feature.market.explore') }}
         </a-menu-item>
-        <a-menu-item key="worker">
-          <template #icon>
-            <SendOutlined style="transform: rotate(-45deg); font-size: 16px" />
-          </template>
-          {{ $t('feature.market.efficiency') }}
-        </a-menu-item>
-        <a-menu-item key="tools">
-          <template #icon>
-            <SearchOutlined style="font-size: 16px" />
-          </template>
-          {{ $t('feature.market.searchTool') }}
-        </a-menu-item>
-        <a-menu-item key="image">
-          <template #icon>
-            <FileImageOutlined style="font-size: 16px" />
-          </template>
-          {{ $t('feature.market.imageTool') }}
-        </a-menu-item>
-        <a-menu-item key="devPlugin">
-          <template #icon>
-            <CodeOutlined style="font-size: 16px" />
-          </template>
-          {{ $t('feature.market.developTool') }}
-        </a-menu-item>
-        <a-menu-item key="system">
-          <template #icon>
-            <DatabaseOutlined style="font-size: 16px" />
-          </template>
-          {{ $t('feature.market.systemTool') }}
-        </a-menu-item>
         <a-sub-menu class="user-info">
           <template #icon>
             <a-avatar :size="32">

@@ -17,6 +17,21 @@ module.exports = {
     plugins: [
       UnoCSS()
     ],
+    module: {
+      rules: [
+        {
+          test: /\.m?js$/,
+          include: /vue-markdown-render/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+              plugins: ['@babel/plugin-proposal-nullish-coalescing-operator', '@babel/plugin-proposal-optional-chaining'],
+            }
+          }
+        }
+      ]
+    }
   },
   chainWebpack(config) {
     config.module.rule('vue').uses.delete('cache-loader')

@@ -9,6 +9,7 @@ import {
   Drawer,
   Dropdown,
   Form,
+  Image,
   Input,
   List,
   Menu,
@@ -62,6 +63,7 @@ createApp(App)
   .use(Menu)
   .use(Form)
   .use(Input)
+  .use(Image)
   .use(Radio)
   .use(Select)
   .use(Switch)
