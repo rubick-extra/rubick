@@ -3,7 +3,7 @@
     <template #title v-if="plugin">
       <div class="plugin-title-info overflow-hidden">
         <div class="info">
-          <a-image :src="plugin.logo" v-if="plugin.logo" :x="plugin.logo" :fallback="defaultLogo" class="plugin-icon h-12 w-12" />
+          <a-image :src="plugin.logo" v-if="plugin.logo" :x="plugin.logo" :preview="false" :fallback="defaultLogo" class="plugin-icon h-12 w-12" />
           <component :is="plugin.icon" v-else-if="plugin.icon" class="plugin-icon h-12 w-12" />
           <img src="@/assets/logo.png" v-else class="plugin-icon h-12 w-12" />
 
@@ -36,31 +36,30 @@
     </template>
     <a-spin :spinning="loading" tip="内容加载中..." v-if="plugin">
       <VueMarkdown v-if="content" :source="content" :options="{ html: true }" class="home-page-container"></VueMarkdown>
-      <iframe v-else-if="plugin.homePage && !error" :src="plugin.homePage" frameborder="0"></iframe>
+      <div v-else-if="htmlContent" v-html="htmlContent"></div>
       <a-result
         class="error-content"
-        v-else
+        v-else-if="!loading"
         sub-title="插件主页内容走丢啦！"
       >
         <template #icon>
           <Vue3Lottie :animationData="notFountJson" :height="240" :width="240" />
         </template>
       </a-result>
+      <div v-else class="w-full min-h-300px"></div>
     </a-spin>
   </a-drawer>
 </template>
 
 <script setup lang="ts">
-import {
-	CloudDownloadOutlined,
-} from "@ant-design/icons-vue";
+import { CloudDownloadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
+import axios from "axios";
 import { reactive, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
+import VueMarkdown from "vue-markdown-render";
 import { useStore } from "vuex";
 import notFountJson from "@/assets/lottie/404.json";
-import VueMarkdown from "vue-markdown-render";
-import axios from "axios";
 
 const defaultLogo = require("@/assets/logo.png");
 
@@ -71,6 +70,7 @@ const props = defineProps<{
 const store = useStore();
 const { t } = useI18n();
 const content = ref("");
+const htmlContent = ref("");
 const loading = ref(false);
 const error = ref(false);
 
@@ -96,26 +96,27 @@ const downloadPlugin = async (plugin: any) => {
 	successDownload(plugin.name);
 };
 
-watchEffect(() => {
-	if (props.plugin) {
-		drawer.show(props.plugin);
-		content.value = "";
-		error.value = false;
-		if (props.plugin.homePage) {
-			loading.value = true;
-			axios
-				.get(props.plugin.homePage)
-				.then((res: any) => {
-					content.value = res.data;
-					loading.value = false;
-				})
-				.catch(() => {
-					loading.value = false;
-					error.value = true;
-				});
-		} else {
-			content.value = props.plugin.readme;
+watchEffect(async () => {
+	if (!props.plugin) return;
+	drawer.show(props.plugin);
+	content.value = "";
+	htmlContent.value = "";
+	error.value = false;
+	if (props.plugin.homePage) {
+		loading.value = true;
+		const response = await axios.get(props.plugin.homePage).catch(() => null);
+		loading.value = false;
+		if (!response) {
+			error.value = true;
+			return;
 		}
+		if (response.headers["content-type"].includes("text/html")) {
+      htmlContent.value = response.data;
+			return;
+		}
+		content.value = response.data;
+	} else {
+		content.value = props.plugin.readme;
 	}
 });
 </script>

@@ -33,6 +33,7 @@ export default createStore({
 		async init({ commit }) {
 			const totalPlugins = await request.getTotalPlugins();
 			const localPlugins = window.market.getLocalPlugins();
+      console.log(JSON.parse(JSON.stringify(localPlugins)));
 
 			totalPlugins.forEach((origin: Market.Plugin) => {
 				origin.isdownload = isDownload(origin, localPlugins);
@@ -87,19 +88,7 @@ export default createStore({
 		},
 
 		successDownload({ commit, state }, name) {
-			const totalPlugins = JSON.parse(JSON.stringify(state.totalPlugins));
-			totalPlugins.forEach((origin: Market.Plugin) => {
-				if (origin.name === name) {
-					origin.isloading = false;
-					origin.isdownload = true;
-				}
-			});
-			const localPlugins = window.market.getLocalPlugins();
-
-			commit("commonUpdate", {
-				totalPlugins,
-				localPlugins,
-			});
+      this.dispatch("init")
 		},
 
 		async updateLocalPlugin({ commit }) {
