@@ -33,15 +33,15 @@ global.LOCAL_PLUGINS = {
   PLUGINS: [],
   async downloadPlugin(plugin) {
     await pluginInstance.install([plugin.name], { isDev: plugin.isDev }).catch(e => {});
-    if (plugin.isDev) {
+    try {
       // 获取 dev 插件信息
       const pluginPath = path.resolve(baseDir, 'node_modules', plugin.name);
       const pluginInfo = JSON.parse(fs.readFileSync(path.join(pluginPath, './package.json'), 'utf8'));
-      plugin = {
-        ...plugin,
-        ...pluginInfo
-      };
-    }
+      plugin.version = pluginInfo.version;
+      if (plugin.isDev) {
+        Object.assign(plugin, pluginInfo);
+      }
+    } catch {}
     global.LOCAL_PLUGINS.addPlugin(plugin);
     return global.LOCAL_PLUGINS.PLUGINS;
   },

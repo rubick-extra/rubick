@@ -1,6 +1,5 @@
 <template>
   <div class="settings">
-    <div class="view-title"> {{ $t('feature.settings.title') }}</div>
     <div class="view-container">
       <a-menu v-model:selectedKeys="currentSelect" mode="horizontal">
         <a-menu-item key="userInfo">
@@ -445,8 +444,7 @@ const changeLanguage = (value) => {
   box-sizing: border-box;
   width: 100%;
   overflow-x: hidden;
-  background: var(--color-body-bg2);
-  height: calc(~'100vh - 34px');
+  height: 100%;
   .ant-menu-horizontal {
     border-bottom: 1px solid var(--color-border-light);
   }

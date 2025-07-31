@@ -6,10 +6,6 @@ export default {
 				search: "搜索插件",
 				searchResult: "搜索结果",
 				explore: "探索",
-				efficiency: "效率",
-				searchTool: "搜索工具",
-				imageTool: "图像",
-				developTool: "开发者",
 				systemTool: "系统",
 				finder: {
 					must: "必备",

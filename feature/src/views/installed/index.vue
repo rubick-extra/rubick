@@ -1,12 +1,8 @@
 <template>
   <div class="installed">
-    <div class="view-title">{{ $t('feature.installed.title') }}</div>
     <div class="view-container">
       <div v-if="!localPlugins.length">
-        <a-result
-          class="error-content"
-          sub-title="哎呀，暂时还没有安装任何插件！"
-        >
+        <a-result class="error-content" sub-title="哎呀，暂时还没有安装任何插件！">
           <template #icon>
             <Vue3Lottie :animationData="emptyJson" :height="240" :width="240" />
           </template>
@@ -17,13 +13,14 @@
       </div>
       <div class="container" v-else>
         <div class="installed-list">
-          <div
-            :class="currentSelect[0] === plugin.name ? 'item active' : 'item'"
-            :key="index"
-            @click="currentSelect = [plugin.name]"
-            v-for="(plugin, index) in localPlugins"
-          >
-            <img :src="plugin.logo" />
+          <div :class="currentSelect[0] === plugin.name ? 'item active' : 'item'" :key="index"
+            @click="currentSelect = [plugin.name]" v-for="(plugin, index) in localPlugins">
+            <div class="w-12 h-12 rounded-md overflow-hidden mr-3 bg-gray-200 flex items-center justify-center flex-shrink-0">
+              <a-image :src="plugin.logo" v-if="plugin.logo" :fallback="defaultLogo" :preview="false"
+                class="w-full h-full object-contain p-1" />
+              <component :is="plugin.icon" class="text-24px" v-else-if="plugin.icon" />
+              <img src="@/assets/logo.png" :alt="plugin.name + ' logo'" v-else class="w-full h-full object-contain p-1">
+            </div>
             <div class="info">
               <div class="title">
                 {{ plugin.pluginName }}
@@ -49,34 +46,20 @@
               </div>
             </div>
             <div class="right">
-              <a-button
-                type="primary"
-                size="small"
-                shape="round"
-                :loading="pluginDetail.isloading"
-                @click="deletePlugin(pluginDetail)"
-              >
+              <a-button type="primary" size="small" shape="round" :loading="pluginDetail.isloading"
+                @click="deletePlugin(pluginDetail)">
                 {{ $t('feature.installed.remove') }}
               </a-button>
             </div>
           </div>
           <div class="feature-container">
-            <template
-              :key="index"
-              v-for="(item, index) in pluginDetail.features"
-            >
-              <div
-                class="desc-item"
-                v-if="item.cmds.filter(cmd => !cmd.label).length > 0"
-              >
+            <template :key="index" v-for="(item, index) in pluginDetail.features">
+              <div class="desc-item" v-if="item.cmds.filter(cmd => !cmd.label).length > 0">
                 <div>{{ item.explain }}</div>
                 <template :key="cmd" v-for="cmd in item.cmds">
-                  <a-dropdown
-                    v-if="!cmd.label"
-                    :class="{ executable: !cmd.label }"
-                  >
+                  <a-dropdown v-if="!cmd.label" :class="{ executable: !cmd.label }">
                     <template #overlay>
-                      <a-menu @click="({key}) => handleMenuClick(key, item, cmd)">
+                      <a-menu @click="({ key }) => handleMenuClick(key, item, cmd)">
                         <a-menu-item key="open">
                           <CaretRightOutlined />
                           运行
@@ -113,11 +96,13 @@ import {
 	PushpinFilled,
 	PushpinOutlined,
 } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
+import { Tag as ATag, message } from "ant-design-vue";
 import path from "path";
 import { computed, ref, toRaw, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+const defaultLogo = require("@/assets/logo.png");
 
 import emptyJson from "@/assets/lottie/empty.json";
 
@@ -254,24 +239,29 @@ const gotoFinder = () => {
   width: 100%;
   overflow: hidden;
   height: calc(~'100vh - 34px');
+
   .view-title {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 16px;
     color: var(--color-text-primary);
   }
+
   .view-container {
     border-radius: 8px;
     background: var(--color-body-bg);
     overflow: auto;
-    height: calc(~'100vh - 84px');
+    height: 100%;
   }
+
   :deep(.ant-result-title) {
     color: var(--color-text-primary);
   }
+
   :deep(.ant-result-subtitle) {
     color: var(--color-text-desc);
   }
+
   .keyword-tag {
     font-size: 13px;
     margin: 4px;
@@ -289,25 +279,28 @@ const gotoFinder = () => {
   .installed-list {
     width: 38%;
     background: var(--color-body-bg);
-    height: 100%;
-    padding: 10px 0;
+    flex: 1;
     border-right: 1px solid var(--color-border-light);
     overflow: auto;
+    padding-right: 10px;
 
     .item {
       padding: 10px 20px;
+      padding-left: 10px;
       display: flex;
       align-items: center;
       color: var(--color-text-content);
       border-bottom: 1px dashed var(--color-border-light);
       cursor: pointer;
+      border-radius: 8px;
+
       &:last-child {
         border-bottom: none;
       }
+
       img {
         width: 34px;
         height: 34px;
-        margin-right: 12px;
       }
 
       .desc {
@@ -316,23 +309,28 @@ const gotoFinder = () => {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         text-overflow: ellipsis;
       }
 
       &.active {
         color: var(--ant-primary-color);
-        background: var(--color-list-hover);
+        background: #99999911;
       }
     }
   }
 
   .plugin-detail {
-    padding: 20px 20px 0 20px;
+    padding: 0 20px;
     box-sizing: border-box;
     width: 62%;
-    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
     background: var(--color-body-bg);
+
     .plugin-top {
       display: flex;
       align-items: flex-start;
@@ -340,11 +338,13 @@ const gotoFinder = () => {
       border-bottom: 1px solid #eee;
       padding-bottom: 12px;
       margin-bottom: 12px;
+
       .title {
         font-size: 16px;
         display: flex;
         align-items: center;
         color: var(--color-text-primary);
+
         .ant-tag {
           background: var(--color-input-hover);
           border: 1px solid var(--color-border-light);
@@ -364,6 +364,7 @@ const gotoFinder = () => {
       height: 380px;
       overflow: auto;
       color: var(--color-text-content);
+
       img {
         width: 100%;
       }
@@ -372,12 +373,14 @@ const gotoFinder = () => {
     .desc-item {
       padding: 10px 0;
       color: var(--color-text-content);
+
       .ant-tag {
         margin-top: 6px;
 
         &.executable {
           cursor: pointer;
           color: var(--ant-info-color);
+
           &:hover {
             transform: translateY(-2px);
           }

@@ -6,10 +6,6 @@ export default {
 				search: "Search Plugins",
 				searchResult: "Search Results",
 				explore: "Explore",
-				efficiency: "Efficiency",
-				searchTool: "Search Tools",
-				imageTool: "Image Tools",
-				developTool: "Develop Tools",
 				systemTool: "System Tools",
 				finder: {
 					must: "Necessary",

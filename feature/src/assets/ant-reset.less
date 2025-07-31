@@ -29,3 +29,85 @@
   // 输入框附带icon
   --color-action-color: #ffffff4d;
 }
+
+// 滚动条基础变量
+@scrollbar-width: 6px;
+@scrollbar-radius: 8px;
+@scrollbar-track-margin: 4px;
+@transition-speed: 0.2s;
+
+// 亮色主题变量
+@light-thumb-bg: rgba(100, 116, 139, 0.5);
+@light-thumb-hover: rgba(100, 116, 139, 0.8);
+@light-track-bg: rgba(226, 232, 240, 0.5);
+
+// 暗色主题变量
+@dark-thumb-bg: rgba(71, 85, 105, 0.5);
+@dark-thumb-hover: rgba(71, 85, 105, 0.8);
+@dark-track-bg: rgba(30, 41, 59, 0.5);
+
+// 基础滚动条样式
+::-webkit-scrollbar {
+  width: @scrollbar-width;
+  height: @scrollbar-width;
+}
+
+::-webkit-scrollbar-track {
+  margin: @scrollbar-track-margin;
+  border-radius: @scrollbar-radius;
+  background: @light-track-bg;
+  transition: background @transition-speed ease;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: @scrollbar-radius;
+  background: @light-thumb-bg;
+  transition: background @transition-speed ease;
+  
+  &:hover {
+    background: @light-thumb-hover;
+  }
+  
+  &:active {
+    background: darken(@light-thumb-hover, 10%);
+  }
+}
+
+// 暗色主题滚动条样式
+.dark {
+  ::-webkit-scrollbar-track {
+    background: @dark-track-bg;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: @dark-thumb-bg;
+    
+    &:hover {
+      background: @dark-thumb-hover;
+    }
+    
+    &:active {
+      background: darken(@dark-thumb-hover, 10%);
+    }
+  }
+}
+
+// 横向滚动条特殊处理
+::-webkit-scrollbar-horizontal {
+  height: @scrollbar-width;
+}
+
+// 滚动角落样式
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+// 可选: 隐藏滚动条但保留功能
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
