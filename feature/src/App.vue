@@ -8,34 +8,25 @@
           </template>
           {{ $t('feature.market.explore') }}
         </a-menu-item>
-        <a-sub-menu class="user-info">
+
+        <a-menu-item key="installed">
           <template #icon>
-            <a-avatar :size="32">
-              <template #icon>
-                <img :src="perf.custom.logo" />
-              </template>
-            </a-avatar>
+            <HeartOutlined />
           </template>
-          <template #title>{{ perf.custom.username }}</template>
-          <a-menu-item key="settings">
-            <template #icon>
-              <SettingOutlined />
-            </template>
-            {{ $t('feature.settings.title') }}
-          </a-menu-item>
-          <a-menu-item key="installed">
-            <template #icon>
-              <HeartOutlined />
-            </template>
-            {{ $t('feature.installed.title') }}
-          </a-menu-item>
-          <a-menu-item key="dev">
-            <template #icon>
-              <BugOutlined />
-            </template>
-            {{ $t('feature.dev.title') }}
-          </a-menu-item>
-        </a-sub-menu>
+          {{ $t('feature.installed.title') }}
+        </a-menu-item>
+        <a-menu-item key="dev">
+          <template #icon>
+            <BugOutlined />
+          </template>
+          {{ $t('feature.dev.title') }}
+        </a-menu-item>
+        <a-menu-item key="settings">
+          <template #icon>
+            <SettingOutlined />
+          </template>
+          {{ $t('feature.settings.title') }}
+        </a-menu-item>
       </a-menu>
     </div>
     <div :class="[
@@ -59,15 +50,15 @@
 
 <script setup lang="ts">
 import {
-	BugOutlined,
-	CodeOutlined,
-	DatabaseOutlined,
-	FileImageOutlined,
-	HeartOutlined,
-	SearchOutlined,
-	SendOutlined,
-	SettingOutlined,
-	StarOutlined,
+  BugOutlined,
+  CodeOutlined,
+  DatabaseOutlined,
+  FileImageOutlined,
+  HeartOutlined,
+  SearchOutlined,
+  SendOutlined,
+  SettingOutlined,
+  StarOutlined,
 } from "@ant-design/icons-vue";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
@@ -80,36 +71,36 @@ const active = computed(() => store.state.active);
 const { perf } = localConfig.getConfig();
 
 const changeMenu = (key: any) => {
-	store.commit("commonUpdate", { active: [key] });
-	router.push(key);
+  store.commit("commonUpdate", { active: [key] });
+  router.push(key);
 };
 
 window.rubick.onPluginEnter(({ code }: { code: string }) => {
-	code = code === "已安装插件" ? "installed" : code;
-	changeMenu(code);
-	store.commit("commonUpdate", { active: [code] });
+  code = code === "已安装插件" ? "installed" : code;
+  changeMenu(code);
+  store.commit("commonUpdate", { active: [code] });
 });
 
 window.rubick.setSubInput((e: any) => {
-	if (
-		[
-			"finder",
-			"result",
-			"devPlugin",
-			"image",
-			"tools",
-			"worker",
-			"system",
-		].includes(active.value[0])
-	) {
-		if (e.text) {
-			store.commit("setSearchValue", e.text);
-			router.push("result");
-		} else {
-			store.commit("commonUpdate", { active: ["finder"] });
-			router.push("finder");
-		}
-	}
+  if (
+    [
+      "finder",
+      "result",
+      "devPlugin",
+      "image",
+      "tools",
+      "worker",
+      "system",
+    ].includes(active.value[0])
+  ) {
+    if (e.text) {
+      store.commit("setSearchValue", e.text);
+      router.push("result");
+    } else {
+      store.commit("commonUpdate", { active: ["finder"] });
+      router.push("finder");
+    }
+  }
 }, "搜索插件");
 
 const init = () => store.dispatch("init");
@@ -188,10 +179,6 @@ init();
     padding: 16px;
     position: relative;
     overflow: auto;
-  }
-
-  .more {
-    background: var(--color-body-bg2);
   }
 
   .left-menu {

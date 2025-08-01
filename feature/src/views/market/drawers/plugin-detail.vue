@@ -1,5 +1,5 @@
 <template>
-  <a-drawer width="77%" v-model:visible="drawer.visible" placement="right" :closable="false">
+  <a-drawer width="77%" v-model:visible="drawer.visible" placement="right" :closable="false" class="dark:bg-#111827">
     <template #title v-if="plugin">
       <div class="plugin-title-info overflow-hidden">
         <div class="info">
@@ -43,7 +43,7 @@
         sub-title="插件主页内容走丢啦！"
       >
         <template #icon>
-          <Vue3Lottie :animationData="notFountJson" :height="240" :width="240" />
+          <Vue3Lottie ref="lottie" :animationData="notFountJson" :height="240" :width="240" @onAnimationLoaded="onAnimationLoaded" />
         </template>
       </a-result>
       <div v-else class="w-full min-h-300px"></div>
@@ -53,13 +53,12 @@
 
 <script setup lang="ts">
 import { CloudDownloadOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
 import axios from "axios";
-import { reactive, ref, watchEffect } from "vue";
-import { useI18n } from "vue-i18n";
+import { inject, reactive, ref, watchEffect } from "vue";
 import VueMarkdown from "vue-markdown-render";
-import { useStore } from "vuex";
 import notFountJson from "@/assets/lottie/404.json";
+
+const downloadPlugin = inject<any>("downloadPlugin");
 
 const defaultLogo = require("@/assets/logo.png");
 
@@ -67,16 +66,11 @@ const props = defineProps<{
 	plugin: any;
 }>();
 
-const store = useStore();
-const { t } = useI18n();
+const lottie = ref<any>(null);
 const content = ref("");
 const htmlContent = ref("");
 const loading = ref(false);
 const error = ref(false);
-
-const startDownload = (name: string) => store.dispatch("startDownload", name);
-const successDownload = (name: string) =>
-	store.dispatch("successDownload", name);
 
 const drawer = reactive({
 	visible: false,
@@ -86,15 +80,6 @@ const drawer = reactive({
 		drawer.plugin = plugin;
 	},
 });
-
-const downloadPlugin = async (plugin: any) => {
-	startDownload(plugin.name);
-	await window.market.downloadPlugin(plugin);
-	message.success(
-		t("feature.dev.installSuccess", { pluginName: plugin.pluginName }),
-	);
-	successDownload(plugin.name);
-};
 
 watchEffect(async () => {
 	if (!props.plugin) return;
@@ -111,7 +96,7 @@ watchEffect(async () => {
 			return;
 		}
 		if (response.headers["content-type"].includes("text/html")) {
-      htmlContent.value = response.data;
+			htmlContent.value = response.data;
 			return;
 		}
 		content.value = response.data;
@@ -119,6 +104,16 @@ watchEffect(async () => {
 		content.value = props.plugin.readme;
 	}
 });
+
+const onAnimationLoaded = async () => {
+  const isDark = document.body.classList.contains("dark");
+	if (lottie.value && isDark) {
+		const el = lottie.value.$el.querySelector("path");
+		if (el) {
+			el.setAttribute("fill", "#111827");
+		}
+	}
+};
 </script>
 
 <style lang="less">
@@ -127,6 +122,15 @@ watchEffect(async () => {
     .back-icon {
       filter: invert(1) brightness(200%);
     }
+  }
+  .ant-drawer-content, .ant-drawer-header {
+    background-color: #111827;
+  }
+  .ant-drawer-header {
+    border-bottom: 1px solid #212937;
+  }
+  .ant-spin-blur::after {
+    opacity: 0!important;
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="finder h-full flex flex-col">
     <div class="grid grid-cols-2 gap-16px">
-      <div class="bg-#99999911 rounded-lg border shadow-md hover:shadow-lg transition-shadow"
+      <div class="bg-#99999911 rounded-lg border shadow-md hover:shadow-lg transition-shadow relative plugin-item"
         v-for="plugin in totalPlugins" @click="drawerContent.name = plugin.name">
         <div class="p-5 flex-col h-full">
           <!-- 插件头部 - Logo和名称 -->
@@ -13,16 +13,19 @@
               <img src="@/assets/logo.png" :alt="plugin.name + ' logo'" v-else class="w-full h-full object-contain p-1">
             </div>
             <div>
-              <h3 class="font-semibold text-base">{{ plugin.pluginName || plugin.name }}</h3>
-              <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ plugin.description }}</p>
+              <h3 class="font-semibold text-base dark:text-white">{{ plugin.pluginName || plugin.name }}</h3>
+              <p class="text-sm text-gray-600 mb-4 line-clamp-2 dark:text-#ccc">{{ plugin.description }}</p>
             </div>
           </div>
           <div class="">
             <div class="flex justify-end items-end text-sm">
-              <span class="font-medium">{{ plugin.isdownload ? plugin.version : '未安装' }}</span>
+              <span class="font-medium dark:text-#ccc">{{ plugin.isdownload ? plugin.version : '' }}</span>
+              <a-button type="primary" size="small" class="install-btn text-xs" @click.stop="downloadPlugin(plugin)" v-if="!plugin.isdownload" :loading="plugin.isloading">立即安装</a-button>
             </div>
           </div>
         </div>
+        <vscode-icons-file-type-npm v-if="plugin.source === 'npm'" class="text-48px absolute bottom-0 left-4 opacity-10 dark:opacity-70" />
+        <devicon-git v-if="plugin.source === 'url'" class="text-32px absolute bottom-4 left-6 opacity-10 dark:opacity-70" />
       </div>
     </div>
     <a-divider />
@@ -31,11 +34,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, markRaw, onBeforeMount, reactive, ref } from "vue";
+import { message } from "ant-design-vue";
+import { computed, markRaw, onBeforeMount, provide, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import Git from "@/icons/DeviconGit.vue";
+import DeviconGit from "@/icons/DeviconGit.vue";
 import Volta from "@/icons/FluentEmojiHighVoltage.vue";
+import VscodeIconsFileTypeNpm from "@/icons/VscodeIconsFileTypeNpm.vue";
 import PluginDetail from "../drawers/plugin-detail.vue";
+
+const { t } = useI18n();
 
 const defaultLogo = require("@/assets/logo.png");
 
@@ -66,7 +75,7 @@ const dependencies = ref([
 ]);
 
 const totalPlugins = computed(() => {
-  console.log('render totalPlugins');
+	console.log("render totalPlugins");
 	const full = JSON.parse(JSON.stringify(store.state.totalPlugins));
 	const local = JSON.parse(JSON.stringify(store.state.localPlugins));
 	full.sort((a: any, b: any) => {
@@ -81,7 +90,6 @@ const totalPlugins = computed(() => {
 		t.isdownload = true;
 		return !exist;
 	});
-  console.log([...dependencies.value, ...merged, ...full]);
 	return [...dependencies.value, ...merged, ...full];
 });
 
@@ -91,6 +99,23 @@ const drawerContent = reactive({
 		return totalPlugins.value.find((item) => item.name === drawerContent.name);
 	}),
 });
+
+const startDownload = (name: string) => store.dispatch("startDownload", name);
+const successDownload = (name: string) =>
+	store.dispatch("successDownload", name);
+
+const downloadPlugin = async (plugin: any) => {
+	startDownload(plugin.name);
+	await window.market.downloadPlugin(plugin);
+	message.success(
+		t("feature.dev.installSuccess", { pluginName: plugin.pluginName }),
+	);
+	successDownload(plugin.name);
+};
+
+provide("downloadPlugin", downloadPlugin);
+provide("startDownload", startDownload);
+provide("successDownload", successDownload);
 
 function afterVisibleChange(visible: boolean) {
 	if (!visible) {
@@ -133,6 +158,17 @@ onBeforeMount(() => {
 
   .ant-divider-horizontal {
     margin: 17px 0;
+  }
+
+  .plugin-item {
+    .install-btn {
+      opacity: 0;
+    }
+    &:hover {
+      .install-btn {
+        opacity: 1;
+      }
+    }
   }
 }
 </style>
