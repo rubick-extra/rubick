@@ -13,26 +13,6 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import("../views/market/components/devlopment.vue"),
 	},
 	{
-		path: "/image",
-		name: "image",
-		component: () => import("../views/market/components/image.vue"),
-	},
-	{
-		path: "/tools",
-		name: "tools",
-		component: () => import("../views/market/components/tools.vue"),
-	},
-	{
-		path: "/worker",
-		name: "worker",
-		component: () => import("../views/market/components/worker.vue"),
-	},
-	{
-		path: "/system",
-		name: "system",
-		component: () => import("../views/market/components/system.vue"),
-	},
-	{
 		path: "/finder",
 		name: "finder",
 		component: () => import("../views/market/components/finder.vue"),

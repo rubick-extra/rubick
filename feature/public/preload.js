@@ -30,6 +30,9 @@ window.market = {
   refreshPlugin(plugin) {
     return remote.getGlobal('LOCAL_PLUGINS').refreshPlugin(plugin);
   },
+  addPluginToDeveloping(plugin) {
+    return remote.getGlobal('LOCAL_PLUGINS').addPluginToDeveloping(plugin);
+  },
   addLocalStartPlugin(plugin) {
     ipcSend('addLocalStartPlugin', { plugin });
   },

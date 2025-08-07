@@ -106,5 +106,10 @@ global.LOCAL_PLUGINS = {
     global.LOCAL_PLUGINS.PLUGINS = global.LOCAL_PLUGINS.PLUGINS.filter(p => plugin.name !== p.name);
     fs.writeFileSync(configPath, JSON.stringify(global.LOCAL_PLUGINS.PLUGINS));
     return global.LOCAL_PLUGINS.PLUGINS;
+  },
+  addPluginToDeveloping(plugin) {
+    const currentPlugins = global.LOCAL_PLUGINS.getLocalPlugins();
+    const target = currentPlugins.find(p => p.name === plugin.name);
+    console.log('target', target);
   }
 };

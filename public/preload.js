@@ -249,11 +249,11 @@ window.rubick = {
     return win;
   },
 
-  getVoltaVersion: () => {
-    return ipcInvoke('getVoltaVersion');
+  installGlobalPackages: (packages) => {
+    return ipcInvoke('installGlobalPackages', { packages });
   },
 
-  getGitVersion: () => {
-    return ipcInvoke('getGitVersion');
+  getPackageVersion: (name) => {
+    return ipcInvoke('getPackageVersion', name);
   },
 };

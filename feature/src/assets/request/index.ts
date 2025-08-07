@@ -28,4 +28,7 @@ export default {
 		console.log("total plugsin", res);
 		return res.data;
 	},
+  async searchPlugin(params: any) {
+    return instance.get("plugins/discover", { params });
+  }
 };

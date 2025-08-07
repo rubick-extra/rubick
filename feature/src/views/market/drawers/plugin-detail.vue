@@ -87,7 +87,9 @@ watchEffect(async () => {
 	content.value = "";
 	htmlContent.value = "";
 	error.value = false;
-	if (props.plugin.homePage) {
+	if (props.plugin.readme) {
+		content.value = props.plugin.readme;
+  } else if (props.plugin.homePage) {
 		loading.value = true;
 		const response = await axios.get(props.plugin.homePage).catch(() => null);
 		loading.value = false;
@@ -100,8 +102,6 @@ watchEffect(async () => {
 			return;
 		}
 		content.value = response.data;
-	} else {
-		content.value = props.plugin.readme;
 	}
 });
 

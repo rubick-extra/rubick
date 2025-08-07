@@ -29,6 +29,7 @@ class API extends DBInstance {
     });
     ipcMain.handle('msg-trigger', async (event, arg) => {
       const window = arg.winId ? BrowserWindow.fromId(arg.winId) : mainWindow;
+      console.log(arg);
       return await this[arg.type](arg, window, event);
     });
     // 按 ESC 退出插件
@@ -352,28 +353,33 @@ class API extends DBInstance {
     );
   }
 
-  public getVoltaVersion() {
-    const volta = spawn('volta', ['--version']);
+  public installGlobalPackages({ data: { packages } }) {
+    const process = spawn('volta', ['install', ...packages], {
+      shell: true
+    });
+    let stdout = '';
+    process.stdout.on('data', data => {
+      stdout += data.toString();
+    });
+    process.stderr.on('data', data => {
+      stdout += data.toString();
+    });
     return new Promise(resolve => {
-      let stdout = '';
-      volta.stdout.on('data', data => {
-        stdout += data.toString();
-      });
-      volta.on('close', () => {
-        resolve(stdout.trim());
+      process.on('close', () => {
+        resolve(!stdout.includes('permission'));
       });
     });
   }
 
-  public getGitVersion() {
-    const git = spawn('git', ['--version']);
+  public getPackageVersion({ data: { name } }) {
+    const process = spawn(name, ['--version']);
     return new Promise(resolve => {
       let stdout = '';
-      git.stdout.on('data', data => {
+      process.stdout.on('data', data => {
         stdout += data.toString();
       });
-      git.on('close', () => {
-        const reg = /\d+.\d+.\d+/;
+      process.on('close', () => {
+        const reg = /\d+.\d+.\d+[^\s\n\t]*/;
         const version = stdout.trim().match(reg);
         resolve(version?.[0] || '未安装');
       });
