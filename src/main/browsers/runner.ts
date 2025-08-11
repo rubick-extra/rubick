@@ -52,7 +52,7 @@ const viewPoolManager = () => {
 };
 
 export default () => {
-  let view;
+  let view: BrowserView | undefined;
   const viewInstance = viewPoolManager();
 
   const viewReadyFn = async (window, { pluginSetting, ext }) => {
@@ -87,17 +87,17 @@ export default () => {
       //   viewInstance.addView(plugin.name, view);
       // }
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('@electron/remote/main').enable(view.webContents);
+      require('@electron/remote/main').enable(view!.webContents);
     }
   };
 
   const createView = (plugin, window: BrowserWindow) => {
-    const { tplPath, indexPath, development, name, main = 'index.html', pluginSetting, ext, originName } = plugin;
+    const { tplPath, indexPath, development, name, main = 'index.html', pluginSetting, ext, originName, enableDevelopment } = plugin;
     let pluginIndexPath = tplPath || indexPath;
     let preloadPath: string | undefined;
     let darkMode: boolean | undefined;
     // 开发环境
-    if (commonConst.dev() && development) {
+    if (commonConst.dev() && development && enableDevelopment) {
       pluginIndexPath = development;
       const pluginPath = path.resolve(baseDir, 'node_modules', originName || name);
       preloadPath = `file://${path.join(pluginPath, './', main)}`;
@@ -155,15 +155,19 @@ export default () => {
   const removeView = (window: BrowserWindow) => {
     if (!view) return;
     executeHooks('PluginOut', null);
-    setTimeout(() => {
-      window.removeBrowserView(view);
-      if (!view.inDetach) {
-        window.setBrowserView(null);
-        view.webContents?.destroy();
-      }
-      window.webContents?.executeJavaScript(`window.initRubick()`);
-      view = undefined;
-    }, 0);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const v = view as any;
+        window.removeBrowserView(v);
+        if (!v.inDetach) {
+          window.setBrowserView(null);
+          v.webContents?.destroy();
+        }
+        window.webContents?.executeJavaScript(`window.initRubick()`);
+        view = undefined;
+        resolve(true);
+      }, 0);
+    });
   };
 
   const getView = () => view;

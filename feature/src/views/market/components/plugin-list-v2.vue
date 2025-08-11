@@ -5,10 +5,8 @@
       <!-- 插件头部 - Logo和名称 -->
       <div class="flex items-start mb-4 flex-1">
         <div
-          class="w-12 h-12 rounded-md overflow-hidden mr-3 bg-gray-200 flex items-center justify-center flex-shrink-0">
-          <a-image :src="plugin.logo" v-if="plugin.logo" :fallback="defaultLogo" :preview="false" class="w-full h-full object-contain p-1" />
-          <component :is="plugin.icon" class="text-24px" v-else-if="plugin.icon" />
-          <img src="@/assets/logo.png" :alt="plugin.name + ' logo'" v-else class="w-full h-full object-contain p-1">
+          class="w-12 h-12 rounded-md overflow-hidden mr-3 flex items-center justify-center flex-shrink-0">
+          <plugin-logo :plugin="plugin" />
         </div>
         <div>
           <h3 class="font-semibold text-base dark:text-white">{{ plugin.pluginName || plugin.name }}</h3>
@@ -38,7 +36,6 @@ import DeviconGit from "@/icons/DeviconGit.vue";
 import PhDevToLogo from "@/icons/PhDevToLogo.vue";
 import VscodeIconsFileTypeNpm from "@/icons/VscodeIconsFileTypeNpm.vue";
 
-const defaultLogo = require("@/assets/logo.png");
 defineProps<{
 	plugins: any[];
 }>();

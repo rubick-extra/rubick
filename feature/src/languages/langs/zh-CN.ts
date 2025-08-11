@@ -13,6 +13,7 @@ export default {
 					lastUpdated: "全部",
 				},
 				install: "安装",
+				uninstall: "卸载",
 			},
 			installed: {
 				title: "已安装",

@@ -6,8 +6,8 @@ import API from '@/main/common/api';
 
 const configPath = path.join(baseDir, './rubick-local-plugin.json');
 
-let registry;
-let pluginInstance;
+let registry: string;
+let pluginInstance: PluginHandler;
 (async () => {
   try {
     const res = await API.dbGet({
@@ -24,7 +24,7 @@ let pluginInstance;
   } catch (e) {
     pluginInstance = new PluginHandler({
       baseDir,
-      registry
+      registry: 'https://registry.npmmirror.com'
     });
   }
 })();
@@ -40,9 +40,11 @@ global.LOCAL_PLUGINS = {
       plugin.version = pluginInfo.version;
       if (plugin.isDev) {
         Object.assign(plugin, pluginInfo);
+      } else {
+        plugin.isDev = false;
       }
+      global.LOCAL_PLUGINS.addPlugin(plugin);
     } catch {}
-    global.LOCAL_PLUGINS.addPlugin(plugin);
     return global.LOCAL_PLUGINS.PLUGINS;
   },
   refreshPlugin(plugin) {

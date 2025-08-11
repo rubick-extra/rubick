@@ -13,6 +13,7 @@ export default {
 					lastUpdated: "Total",
 				},
 				install: "Install",
+				uninstall: "Uninstall",
 			},
 			installed: {
 				title: "Installed",

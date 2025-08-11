@@ -34,6 +34,7 @@ const dependencies = ref([
 		name: "Volta",
 		version: "未安装",
 		isdownload: false,
+    isExtra: true,
 		icon: markRaw(Volta),
 		description: "Volta 是一种管理 JavaScript 命令行工具的轻松方式",
 		update: () => updatePackageVersion("volta"),
@@ -45,6 +46,7 @@ const dependencies = ref([
 		name: "Git",
 		version: "未安装",
 		isdownload: false,
+		isExtra: true,
 		icon: markRaw(Git),
 		description:
 			"Git 是一个免费的开源分布式版本控制系统，旨在处理从小型到 非常大的项目，速度和效率。",
@@ -58,6 +60,7 @@ const dependencies = ref([
 		name: "yalc",
 		version: "未安装",
 		isdownload: false,
+		isExtra: true,
 		icon: markRaw(Yalc),
 		description:
 			"yalc 是一个更现代化的 Npm 包调试工具, 开发者相关的功能会用到它",
@@ -70,6 +73,7 @@ const dependencies = ref([
 		name: "asar",
 		version: "未安装",
 		isdownload: false,
+		isExtra: true,
 		icon: markRaw(Asar),
 		description: "asar 是 Electron 的打包工具, 或许有些意想不到的用途",
 		update: () => updatePackageVersion("asar"),

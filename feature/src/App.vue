@@ -9,12 +9,12 @@
           {{ $t('feature.market.explore') }}
         </a-menu-item>
 
-        <a-menu-item key="installed">
+        <!-- <a-menu-item key="installed">
           <template #icon>
             <HeartOutlined />
           </template>
           {{ $t('feature.installed.title') }}
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-item key="dev">
           <template #icon>
             <BugOutlined />
