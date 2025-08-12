@@ -4,6 +4,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import extract from '@/common/utils/file-icon-extractor';
+import { resolveLnk } from './resolve-lnk';
 
 const filePath = path.resolve('C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs');
 
@@ -60,8 +61,13 @@ async function fileDisplay(filePath) {
         let appDetail: any = {};
         try {
           appDetail = shell.readShortcutLink(filedir);
+          if (filedir === 'C:\\Users\\Admin\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Cursor\\Cursor.lnk') {
+            console.log(appDetail);
+          }
         } catch (e) {
           //
+          const target = await resolveLnk(filedir);
+          appDetail = target ? { target } : {};
         }
         if (!appDetail.target || appDetail.target.toLowerCase().indexOf('unin') >= 0) return;
 
@@ -73,7 +79,7 @@ async function fileDisplay(filePath) {
           // const zh_firstLatter = pinyinArr.map((py) => py[0]);
           // // 拼音
           // keyWords.push(pinyinArr.join(''));
-          // 缩写
+          // // 缩写
           // keyWords.push(zh_firstLatter.join(''));
         } else {
           const firstLatter = appName
@@ -97,6 +103,9 @@ async function fileDisplay(filePath) {
           name: appName,
           names: JSON.parse(JSON.stringify(keyWords))
         };
+        if (appInfo.desc === 'C:\\Users\\') {
+          console.log('appInfo', appInfo, filedir);
+        }
         fileLists.push(appInfo);
         await getico(appInfo);
       }

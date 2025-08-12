@@ -1,6 +1,6 @@
 import commonConst from "@/common/utils/commonConst";
 
-let appSearch;
+let appSearch: any;
 
 if (commonConst.macOS()) {
 	appSearch = require("./darwin");
