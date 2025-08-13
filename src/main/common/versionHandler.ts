@@ -4,7 +4,7 @@ import pkg from "../../../package.json";
 import { getLatestVersion } from "./getLatestVersion";
 
 const version = pkg.version;
-const downloadUrl = "https://github.com/rubickCenter/rubick/releases/latest";
+const downloadUrl = "https://github.com/rubick-extra/rubick/releases/latest";
 
 const checkVersion = async () => {
 	const res: string = await getLatestVersion();

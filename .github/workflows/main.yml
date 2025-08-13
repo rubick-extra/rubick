@@ -35,11 +35,10 @@ jobs:
       - name: Check out git repository
         uses: actions/checkout@v2
 
-      # step2: install node env
-      - name: Install Node.js
-        uses: actions/setup-node@v2
+      - uses: volta-cli/action@v4
         with:
-          node-version: 16.x
+          node-version: 22.x
+          yarn-version: 1.x
 
       - name: Install system deps
         if: matrix.os == 'ubuntu-latest'
@@ -51,8 +50,8 @@ jobs:
       - name: Yarn install
         run: |
           yarn
-          yarn global add xvfb-maybe
-          yarn global add @vue/cli
+          volta install xvfb-maybe
+          volta install @vue/cli
       - name: Build feature
         run: |
           cd ./feature

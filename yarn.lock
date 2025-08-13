@@ -7,23 +7,32 @@
   resolved "https://registry.npmmirror.com/7zip-bin/-/7zip-bin-5.1.1.tgz#9274ec7460652f9c632c59addf24efb1684ef876"
   integrity sha512-sAP4LldeWNz0lNzmTird3uWfFDWWTeg6V/MsmyyLR9X1idwKBWIgt/ZvinqQldJm3LecKEs1emkbquO6PCiLVQ==
 
-"@achrinza/node-ipc@9.2.2":
-  version "9.2.2"
-  resolved "https://registry.npmmirror.com/@achrinza/node-ipc/-/node-ipc-9.2.2.tgz#ae1b5d3d6a9362034eea60c8d946b93893c2e4ec"
-  integrity sha512-b90U39dx0cU6emsOvy5hxU4ApNXnE3+Tuo8XQZfiKTGelDwpMwBVgBP7QX6dGTcJgu/miyJuNJ/2naFBliNWEw==
+"@achrinza/event-pubsub@5.0.11":
+  version "5.0.11"
+  resolved "https://registry.npmjs.org/@achrinza/event-pubsub/-/event-pubsub-5.0.11.tgz#8aadeb5b4d8d8b7ac7631269793bdb12fc38f78d"
+  integrity sha512-H/bswjSh/wMIgtizHIdeQQuquzBsia0uqf0IaadMKhS7jv5wX0iMqkVbYDZhUhbjJqXnfX4jjzgclt24aizdHA==
   dependencies:
+    "@achrinza/strong-type" "0.1.14"
+
+"@achrinza/node-ipc@10.1.11", "@achrinza/node-ipc@9.2.2", "@achrinza/node-ipc@^9.2.5":
+  version "10.1.11"
+  resolved "https://registry.npmjs.org/@achrinza/node-ipc/-/node-ipc-10.1.11.tgz#22263c89aa7a5f3ae42d072b0b1e28b6e5e84800"
+  integrity sha512-3z2yix2G8KP8gW6dWgRPj61Mu2nleqbWqTuS5vluZiXe2VDFkimqaeb4fnuS6JV2nhJz4gX+PR5PQjRKsuXm8w==
+  dependencies:
+    "@achrinza/event-pubsub" "5.0.11"
+    "@achrinza/strong-type" "1.1.20"
     "@node-ipc/js-queue" "2.0.3"
-    event-pubsub "4.3.0"
     js-message "1.0.7"
 
-"@achrinza/node-ipc@^9.2.5":
-  version "9.2.9"
-  resolved "https://registry.npmmirror.com/@achrinza/node-ipc/-/node-ipc-9.2.9.tgz#ab4815d9b16f1c83a479fe8791522a3abebb1c6a"
-  integrity sha512-7s0VcTwiK/0tNOVdSX9FWMeFdOEcsAOz9HesBldXxFMaGvIak7KC2z9tV9EgsQXn6KUsWsfIkViMNuIo0GoZDQ==
-  dependencies:
-    "@node-ipc/js-queue" "2.0.3"
-    event-pubsub "4.3.0"
-    js-message "1.0.7"
+"@achrinza/strong-type@0.1.14":
+  version "0.1.14"
+  resolved "https://registry.npmjs.org/@achrinza/strong-type/-/strong-type-0.1.14.tgz#8d72de8ff2849143093d1acaafdd377299818683"
+  integrity sha512-Se5kMdqRxrjBfpUnVS819OUqW6XUj2ryOHNkZizQ44FGQMfr5X+RXyi4Y8DZn5+lsx2sdnIylpmK6N7TGMpDrw==
+
+"@achrinza/strong-type@1.1.20":
+  version "1.1.20"
+  resolved "https://registry.npmjs.org/@achrinza/strong-type/-/strong-type-1.1.20.tgz#8dc16812aec359e85403209537fa141347ff9fdb"
+  integrity sha512-7+A0aC1C6tt1j69phZocl13RZ4vzz6W6jFhSUty9KNgKyoUH48oeZlSQdj2VONlT+sbdkfO7VJJbWiKBqNwebA==
 
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
@@ -5700,11 +5709,6 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.npmmirror.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
-
-event-pubsub@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.npmmirror.com/event-pubsub/-/event-pubsub-4.3.0.tgz#f68d816bc29f1ec02c539dc58c8dd40ce72cb36e"
-  integrity sha512-z7IyloorXvKbFx9Bpie2+vMJKKx1fH1EN5yiTfp8CiLOTptSYy1g8H4yDpGlEdshL1PBiFtBHepF2cNsqeEeFQ==
 
 event-target-shim@^5.0.0:
   version "5.0.1"

@@ -70,11 +70,12 @@
     "worker-plugin": "^5.0.1"
   },
   "resolutions": {
+    "@achrinza/node-ipc": "10.1.11",
     "electron-builder": "23.0.3",
     "playwright-core": "1.17.1",
     "leveldown": "6.0.3"
   },
   "volta": {
-    "node": "16.20.2"
+    "node": "22.18.0"
   }
 }
